@@ -10,7 +10,54 @@
 
 </p>
 
+## [Project Overview](#project-overview)
+
+In modern SOC environments, detecting security incidents is only the first step. Without rapid response, attackers can escalate privileges, maintain persistence, or expand their impact.
+This project demonstrates how AWS native services can be used to automatically contain security incidents immediately after detection, following SOC and SOAR best practices.
+
+
+## 🛠️ AWS Services Used
+
+✔ AWS CloudTrail
+
+✔ Amazon CloudWatch
+
+✔ Amazon EventBridge
+
+✔ AWS Lambda
+
+✔ AWS Identity and Access Management (IAM)
+
+✔ Amazon SNS
+
+
+## 🗜 Architecture Overview
+
+- Suspicious IAM activity is detected using CloudWatch metrics or GuardDuty findings
+
+- EventBridge captures the detection event
+
+- AWS Lambda executes an automated response action
+
+- SNS notifies the SOC team of the action taken
+
+- All actions are logged for audit and review
+
+## 📚 Table of Contents
+
+1. [Project Overview](#project-overview)
+2. Architecture Design
+3. Detection Trigger Selection
+4. SNS Notification Setup
+5. IAM Role for Automated Response
+6. Lambda Response Function
+7. EventBridge Integration
+8. Response Testing & Validation
+9. Cost Control & Service Shutdown
+10. Project Conclusion
 
 
 
-This project extends cloud security detection into automated response using AWS native services. It demonstrates how SOC teams reduce mean time to respond (MTTR) by integrating detection, automation, and notification in a secure and cost-aware manner.
+
+
+
