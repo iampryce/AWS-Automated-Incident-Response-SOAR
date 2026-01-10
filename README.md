@@ -33,15 +33,19 @@ This project demonstrates how AWS native services can be used to automatically c
 
 ## 🗜 Architecture Overview
 
-- Suspicious IAM activity is detected using CloudWatch metrics or GuardDuty findings
+1. Suspicious IAM activity is detected using CloudWatch metrics or GuardDuty findings
 
-- EventBridge captures the detection event
+2. EventBridge captures the detection event
 
-- AWS Lambda executes an automated response action
+3.  AWS Lambda executes an automated response action
 
-- SNS notifies the SOC team of the action taken
+4.  SNS notifies the SOC team of the action taken
 
-- All actions are logged for audit and review
+5. All actions are logged for audit and review
+
+  
+<img width="1160" height="583" alt="image" src="https://github.com/user-attachments/assets/3d8c5a86-22b3-41e8-92da-58a418ccc200" /> <br/>
+
 
 ## 📚 Table of Contents
 
@@ -57,28 +61,6 @@ This project demonstrates how AWS native services can be used to automatically c
 10. Project Conclusion
 
 
-## 🧱 Architecture Components & Flow
-
-CloudTrail / GuardDuty
-
-         🔽
-        
-CloudWatch Metric / Finding
-
-         🔽
-        
-EventBridge Rule
-
-         🔽
-        
-Lambda Response Function
-
-         🔽
-        
-IAM Action + SNS Notification
-
-
-<img width="1160" height="583" alt="image" src="https://github.com/user-attachments/assets/3d8c5a86-22b3-41e8-92da-58a418ccc200" /> <br/>
 
 
 
