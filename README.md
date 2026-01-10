@@ -65,23 +65,94 @@ This project demonstrates how AWS native services can be used to automatically c
 
 
 
-### 🔹 1. Detection Source
+## 🗜 1. Detection Source
+
+  ### Flow       🔽
 
 Security events originate from:
 
-CloudWatch Metric Filters (from CloudTrail logs)
+- CloudWatch Metric Filters (from CloudTrail logs)
 
-GuardDuty Findings (managed threat detection)
+- GuardDuty Findings (managed threat detection)
 
-These identify suspicious behavior such as:
+### 📌Purpose: identify suspicious behavior such as:
 
-Unauthorized IAM activity
+- Unauthorized IAM activity
 
-Root account usage
+- Root account usage
 
-Reconnaissance attempts
+- Reconnaissance attempts
 
-### 🔹 2. Event Routing (EventBridge)
+
+  
+## 🔍 Selected Incident: Unauthorized IAM Activity
+
+🔷 _step 1_
+#### Created a S3 Bucket to store CloudTrail Logs
+
+🧰  S3 Bucket Configurations
+
+✔ Block ALL public access
+
+✔ Leave defaults enabled
+
+✔ Enable versioning
+
+<img width="1343" height="622" alt="image" src="https://github.com/user-attachments/assets/2db7a53d-051b-447f-a849-439446a2f12d" />
+
+----
+
+🔷 _step 2_
+#### Created CloudTrail 
+
+📌 I created a multi-region CloudTrail, configured to capture all management API activity across the AWS account.
+
+📌 Logs are stored in the Amazon S3 bucket for audit purposes and streamed to CloudWatch Logs for real-time security detection.
+
+🧰  CloudTrail Configurations
+
+✔ Enable: Apply trail to all regions
+
+✔  Event type : MAnagement event, Captures management operations performed on AWS resources. (IAM changes, EC2 actions, Security group updates, Root activities)
+
+✔ Enable CloudWatch Logs
+
+✔ Enable  Log File Integrity Validation
+
+✔ Enabled CloudWatch 
+
+<img width="1271" height="598" alt="image" src="https://github.com/user-attachments/assets/c70daca4-2dfc-483f-b061-35a7082f79e4" />
+
+<img width="1344" height="560" alt="image" src="https://github.com/user-attachments/assets/004bb1ec-ff4a-4897-8c96-8765b8363ebb" />
+
+
+✅ Verification 
+
+✔ Logging: ON
+
+✔ Multi-region: YES
+
+✔ S3 bucket begins receiving logs : Trail log location
+security-cloudtrail-logs01/AWSLogs/o-z96jg5oz46/766593778503 
+
+✔ CloudWatch log group exists
+
+
+<img width="1334" height="554" alt="image" src="https://github.com/user-attachments/assets/9815ea44-5560-430e-8de1-cdc36de6f65f" />
+
+
+
+
+
+Created a CloudWatch Metric Filter.
+
+
+
+
+
+
+
+## 🗜 2. Event Routing (EventBridge)
 
 Amazon EventBridge listens for:
 
@@ -91,7 +162,7 @@ GuardDuty findings with severity ≥ Medium
 
 EventBridge acts as the central event router.
 
-### 🔹 3. Automated Response Engine (Lambda)
+## 🗜 3. Automated Response Engine (Lambda)
 
 AWS Lambda executes response actions such as:
 
@@ -103,7 +174,7 @@ Logging incident metadata
 
 ⚠️ No destructive actions (no deletes) — SOC-safe automation.
 
-### 🔹 4. Notification & Visibility
+## 🗜 4. Notification & Visibility
 
 Amazon SNS sends alerts to:
 
@@ -119,7 +190,7 @@ Which resource was affected
 
 What action was automatically taken
 
-### 🔹 5. Logging & Audit
+## 🗜 5. Logging & Audit
 
 All actions are logged to:
 
