@@ -11,8 +11,6 @@
 </p>
 
 ## Project Overview
-
-In modern SOC environments, detecting security incidents is only the first step. Without rapid response, attackers can escalate privileges, maintain persistence, or expand their impact.
 This project demonstrates how AWS native services can be used to automatically contain security incidents immediately after detection, following SOC and SOAR best practices.
 
 
@@ -65,27 +63,7 @@ This project demonstrates how AWS native services can be used to automatically c
 
 
 
-## 🗜 1. Detection Source
-
-  ### Flow       🔽
-
-Security events originate from:
-
-- CloudWatch Metric Filters (from CloudTrail logs)
-
-- GuardDuty Findings (managed threat detection)
-
-### 📌Purpose: identify suspicious behavior such as:
-
-- Unauthorized IAM activity
-
-- Root account usage
-
-- Reconnaissance attempts
-
-
-  
-## 🔍 Selected Incident: Unauthorized IAM Activity
+## 🗜 1A. Detection Source & Prep
 
 🔷 _step 1_
 #### Created a S3 Bucket to store CloudTrail Logs
@@ -103,9 +81,10 @@ Security events originate from:
 ----
 
 🔷 _step 2_
+
 #### Created CloudTrail 
 
-📌 I created a multi-region CloudTrail, configured to capture all management API activity across the AWS account.
+📌 I created a multi-region CloudTrail, configured to capture all management API activity across the AWS account or outside.
 
 📌 Logs are stored in the Amazon S3 bucket for audit purposes and streamed to CloudWatch Logs for real-time security detection.
 
@@ -138,14 +117,49 @@ security-cloudtrail-logs01/AWSLogs/o-z96jg5oz46/766593778503
 ✔ CloudWatch log group exists
 
 
-<img width="1334" height="554" alt="image" src="https://github.com/user-attachments/assets/9815ea44-5560-430e-8de1-cdc36de6f65f" />
+<img width="1334" height="554" alt="image" src="https://github.com/user-attachments/assets/9815ea44-5560-430e-8de1-cdc36de6f65f" /> <br/>
+
+✔ CloudWatch log strems which means cloudTrail is streaming to cloudWatch
+
+<br>
+
+<img width="1288" height="616" alt="image" src="https://github.com/user-attachments/assets/34e34cc4-735d-415f-80e3-65b37fac0c5f" />
+
+
+✔ CloudTrail logging was validated by generating IAM activity and confirming log delivery to the S3 Bucket. <br/>
+
+
+<img width="1346" height="620" alt="image" src="https://github.com/user-attachments/assets/74360680-5a54-4fb6-83ae-04073841cd8f" />
 
 
 
 
+## 1B Detection Rule: Unauthorized API Calls 
 
-Created a CloudWatch Metric Filter.
+### Flow       🔽
 
+Security events originate from:
+
+- CloudWatch Metric Filters (from CloudTrail logs)
+
+- GuardDuty Findings (managed threat detection)
+
+### 📌Purpose: identify suspicious behavior such as:
+
+- Unauthorized IAM activity
+
+- Root account usage
+
+- Reconnaissance attempts 
+  
+
+## 🔍 Selected Incident: Unauthorized IAM Activity
+
+🔷 _step 1_
+
+### Created a CloudWatch Metric Filter to capture all unauthorised IAM activities
+
+Pattern { ($.errorCode = "AccessDenied") && ($.eventSource = "iam.amazonaws.com") }
 
 
 
