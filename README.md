@@ -236,7 +236,7 @@ Amazon EventBridge listens for:
 
 📌 #### Troubleshooting 1
 
-During validation, I used Lambda manual invocation to confirm logging functionality. Earlier EventBridge-triggered invocations executed a previous Lambda version before code deployment, resulting in system logs only. Redeploying the function resolved the issue.
+❌ During validation, I used Lambda manual invocation to confirm logging functionality. Earlier EventBridge-triggered invocations executed a previous Lambda version before code deployment, resulting in system logs only. Redeploying the function resolved the issue.
 
 <img width="1279" height="549" alt="image" src="https://github.com/user-attachments/assets/734baa4e-aff1-4adb-9c53-0f228a105a8a" />
 
@@ -250,7 +250,9 @@ During validation, I used Lambda manual invocation to confirm logging functional
 
 📌 #### Troubleshooting 2
 
-Guard duty did not display IAM Username
+i wanted the log to include the username of the IAM User who triggered the action, before Lambda restrict the user
+
+❌ Guard duty did not display IAM Username
 
 🚨 Reasons
 
@@ -325,13 +327,89 @@ _📌 Note: This code was generated with AI_
 
 <img width="1326" height="641" alt="image" src="https://github.com/user-attachments/assets/59fce0d4-f323-4e71-bb7a-63ee0531ae52" />
 
+✅ Test
+
+Outcome : Log working but no username
+
+<img width="1337" height="639" alt="image" src="https://github.com/user-attachments/assets/79ca53fa-5eb0-49d7-8ae6-8c1e4b0e76d9" />
+
+📌 #### Troubleshooting 3
+
+❌ Cloudwatch log  did not also display IAM Username (it did not display the name of user who performed the action)
+
+So the problem persist.
+
+## ✅ Solution (source ChatGpt)
+
+📌 Note: To dynamically identify the IAM user, you must send CloudTrail events DIRECTLY to EventBridge Not via alarms. 
+
+CloudTrail Records who did what in AWS (API calls, user/role, time, source IP, etc.)
+
+Captures the user identity (userName, arn, role)
+
+CloudWatch Logs
+
+Receives raw log messages from services like Lambda, VPC Flow Logs, or CloudTrail if you forward them
+
+It does not automatically parse user info unless you specifically include it in the logs
+
+Example: if you just log the CloudTrail event in Lambda, you need to access the userIdentity field yourself
 
 
 
+
+Correct Solutions Flow 🔽
+
+Security events originate from:
+
+CloudTrail API events (AccessDenied)
+
+ 🔽 Routed directly by
+
+Amazon EventBridge (CloudTrail event source)
+
+ 🔽 Trigger
+
+AWS Lambda
+
+ 🔽 Action
+
+Extract IAM user 
+
+
+🔷 _step 1_
+
+Created an EventBridge Rule (CloudTrail API Events)
+
+In this case EventBridge will route CloudTrail API event to the targert Lambda while Lambda function get triggered.
+
+<img width="1352" height="653" alt="image" src="https://github.com/user-attachments/assets/9a14f815-6169-4d99-83a9-95a9213a99a8" />
+
+
+ <br/>
+
+****
+
+
+🔷 _step 2_
+
+Updated Lambda function code 
+
+<img width="1354" height="645" alt="image" src="https://github.com/user-attachments/assets/85d3cdd6-0e68-4984-b551-1b0daccf02f2" />
+
+
+
+
+## ✅ Verification
 
 ✅ Test: Unauthorized IAM Action
 
-📌 Note: In other to trigger alarm, i used a low priviledge user and performed some IAM activity. (This is to confirm that everything works)
+
+<img width="1342" height="625" alt="image" src="https://github.com/user-attachments/assets/e5890eed-7e9e-49fd-9af0-1df679aad9c8" />
+
+
+
+
 
 
 
